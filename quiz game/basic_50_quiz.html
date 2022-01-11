@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Game</title>
+    <script>
+        window.onload = function() {
+            q(0);
+            var name = prompt("Enter your name");
+            sessionStorage.setItem("name",name);
+            document.getElementById("player").innerHTML = name;
+
+        }
+
+    </script>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            font-family: sans-serif;
+        }
+
+        .main {
+            width: 700px;
+            height: 350px;
+            background-color: #0066fffa;
+            position: absolute;
+            top: 5%;
+            left: 25%;
+        }
+
+        .header {
+            height: 17%;
+            width: 100%;
+            background-color: dodgerblue;
+            box-shadow: 0 1px 4px 0.2px black;
+        }
+
+        .header h2 {
+            position: relative;
+            left: 20px;
+            top: 22%;
+            color: white;
+            text-transform: capitalize;
+        }
+
+        #player {
+            text-transform: capitalize;
+        }
+
+        #questiondiv {
+            position: relative;
+            width: 100%;
+            top: 2%;
+            background-color: #0066fffa;
+            height: 55px;
+        }
+
+        #question {
+            color: white;
+            top: 8px;
+            left: 17px;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .optiondiv {
+            background-color: #0066fffa;
+            height: 145px;
+            width: 100%;
+            position: relative;
+        }
+
+        .ans {
+            position: relative;
+            list-style-type: none;
+            width: 40%;
+            background-color: transparent;
+            color: white;
+            font-weight: 500;
+            text-transform: capitalize;
+            padding: 10px 10px;
+            text-align: left;
+            margin-top: 20px;
+            cursor: pointer;
+            border: 1px solid white;
+        }
+
+        .ans:hover {
+            transition: 0.3s;
+            background-color: white;
+            color: black;
+        }
+
+        #opt1 {
+            float: left;
+            left: 5%;
+        }
+
+        #opt2 {
+            float: right;
+            right: 5%;
+        }
+
+        #opt3 {
+            float: left;
+            left: 5%;
+        }
+
+        #opt4 {
+            float: right;
+            right: 5%;
+        }
+
+
+        .active {
+            background-color: white;
+            color: black;
+        }
+
+        .lastdiv {
+            position: relative;
+            background-color: #0066fffa;
+            height: 90px;
+            width: 100%;
+        }
+
+        .btn {
+            position: relative;
+            left: 78%;
+            top: 30%;
+            padding: 10px;
+            border: 1px solid white;
+            background-color: transparent;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .btn:hover {
+            top: 31%;
+            transition: .1s;
+            background-color: white;
+            color: black;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="header" id="header">
+            <h2>welcome <span id="player"></span></h2>
+        </div>
+        <div id="questiondiv">
+            <h3 id="question"></h3>
+        </div>
+        <div class="optiondiv" id="optiondiv">
+            <ul>
+                <li class="ans" id="opt1"></li>
+                <li class="ans" id="opt2"></li>
+                <li class="ans" id="opt3"></li>
+                <li class="ans" id="opt4"></li>
+            </ul>
+        </div>
+        <div class="lastdiv"><button class="btn" id="btn" onclick="plus();">Next Question</button></div>
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+        var name = sessionStorage.getItem("name");
+        document.getElementById("player").innerHTML = name;
+        //------------  user name ----------//
+
+        //-------------for increment questions ---------------//
+        var count = 0;
+        let marks = 0;
+
+        
+        //----------- question link for java scipt question array-------//
+
+
+
+        function q(count) {
+            var current_question = document.getElementById("question");
+            var options = document.getElementById("optiondiv");
+            var cq = current_question.innerHTML = `<h3 id="question">Q${count+1}. ${questions[count].question}</h3>`;
+            options.innerHTML = `<ul>
+                                            <li class="ans" id="opt1">${questions[count].options[0]}</li>
+                                            <li class="ans" id="opt2">${questions[count].options[1]}</li>
+                                            <li class="ans" id="opt3">${questions[count].options[2]}</li>
+                                            <li class="ans" id="opt4">${questions[count].options[3]}</li>
+                                        </ul>`;
+            
+            if(count == questions.length -1)
+                     {
+                         btn.textContent='finish';
+                         location.href= "basic_50_quiz_result.html";
+                         return;
+                         
+                     }
+            
+            toggleActive();
+            
+            
+        }
+
+        //---------------------- active class for active option on click ----------------//
+        function toggleActive() {
+            var option = document.querySelectorAll("li.ans");
+            for (let i = 0; i < option.length; i++) {
+                option[i].onclick = function() {
+                    // if already active any option the loop make unactive//
+                    for (let a = 0; a < option.length; a++) {
+                        if (option[a].classList.contains("active")) {
+                            option[a].classList.remove("active");
+                        }
+                    }
+                    // on click any option active class //
+                    option[i].classList.add("active");
+
+                }
+            }
+        };
+        
+        function plus() {
+                let current_question = document.getElementById("question").innerHTML;
+                    
+                 
+                    
+                   
+                
+            // ------ user select answer and (check the answer) -----//
+            let answer = document.querySelector("li.ans.active").innerHTML;
+            console.log(answer);
+
+            if (answer == questions[count].answer) {
+                marks += 1;
+                sessionStorage.setItem("mark", marks);
+            };
+
+               
+             count++;
+            q(count);
+            
+            
+             
+
+
+        }
+
+    </script>
+    <script src="../js/basic_50_questions.js"></script>
+</body>
+
+</html>
